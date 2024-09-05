@@ -1,11 +1,17 @@
 #!/bin/bash
+USER=$(whoami)
+WORKDIR="/home/${USER}"
 
-mkdir -p SK5
+if [ ! -d "$WORKDIR/SK5" ]; then
+    mkdir -p "$WORKDIR/SK5"
+fi
 
-# 提示用户输入socks5端口号
+if [ ! -f "$WORKDIR/SK5/SK5" ]; then
+    wget -P "$WORKDIR/SK5" https://github.com/878088/S00-PM/releases/download/SK5/SK5
+fi
+
 read -p "请输入socks5端口号: " SOCKS5_PORT
 
-# 提示用户输入用户名和密码
 read -p "请输入socks5用户名: " SOCKS5_USER
 
 while true; do
@@ -18,8 +24,7 @@ while true; do
   fi
 done
 
-# config.js文件
-  cat > SK5/config.json << EOF
+cat > "$WORKDIR/SK5/config.json" << EOF
 {
   "log": {
     "access": "/dev/null",
@@ -53,3 +58,14 @@ done
   ]
 }
 EOF
+
+cat > "$WORKDIR/SK5/socks5.sh" << EOF
+if pgrep -f SK5 > /dev/null; then
+    echo "SK5 is already running."
+else
+    screen -dmS SK5 ./SK5/SK5 -c SK5/config.json
+    echo "Screen session created and SK5 is running."
+fi
+EOF
+
+chmod +x "$WORKDIR/SK5/socks5.sh" && "$WORKDIR/SK5/socks5.sh"
