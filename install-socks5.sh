@@ -60,11 +60,11 @@ cat > "$WORKDIR/SK5/config.json" << EOF
 EOF
 
 cat > "$WORKDIR/SK5/socks5.sh" << EOF
-if pgrep -f s5 > /dev/null; then
-    echo "s5 is already running."
+if pgrep -f SK5 > /dev/null; then
+    echo "SK5 is already running."
 else
-    screen -dmS s5 ./SK5/SK5 -c SK5/config.json
-    echo "Screen session created and s5 is running."
+    screen -dmS SK5 ./SK5/SK5 -c SK5/config.json
+    echo "Screen session created and SK5 is running."
 fi
 EOF
 
