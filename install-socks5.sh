@@ -2,7 +2,7 @@
 
 # 获取当前用户名
 USER=$(whoami)
-FILE_PATH="${USER}/SK5"
+FILE_PATH="mkdir -p SK5"
 
 ###################################################
 
