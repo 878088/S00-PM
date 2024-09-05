@@ -2,7 +2,7 @@
 
 # 获取当前用户名
 USER=$(whoami)
-FILE_PATH="mkdir -p SK5"
+FILE_PATH="${USER}/SK5"
 
 ###################################################
 
@@ -59,8 +59,3 @@ done
 }
 EOF
 }
-
-install_socks5(){
-  socks5_config
-  if [ ! -e "${FILE_PATH}/SK5" ]; then
-    curl -L -sS -o "${FILE_PATH}/SK5" "https://github.com/878088/S00-PM/releases/download/SK5/SK5"
