@@ -60,12 +60,16 @@ cat > "$WORKDIR/SK5/config.json" << EOF
 EOF
 
 cat > "$WORKDIR/SK5/socks5.sh" << EOF
-if pgrep -f SK5 > /dev/null; then
-    echo "SK5 is already running."
+if pgrep -f s5 > /dev/null; then
+    echo "s5 is already running."
 else
-    screen -dmS SK5 ./SK5/SK5 -c SK5/config.json
-    echo "Screen session created and SK5 is running."
+    screen -dmS s5 ./SK5/SK5 -c SK5/config.json
+    echo "Screen session created and s5 is running."
 fi
 EOF
 
-chmod +x "$WORKDIR/SK5/socks5.sh" && "$WORKDIR/SK5/socks5.sh"
+chmod +x "$WORKDIR/SK5/"*
+
+(crontab -l 2>/dev/null; echo "* * * * * $WORKDIR/SK5/socks5.sh"; echo "*/1 * * * * sleep 30 && $WORKDIR/SK5/socks5.sh") | crontab -
+
+"$WORKDIR/SK5/socks5.sh"
