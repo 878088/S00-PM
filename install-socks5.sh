@@ -4,9 +4,6 @@
 USER=$(whoami)
 FILE_PATH="${USER}/SK5"
 
-###################################################
-
-socks5_config(){
 # 提示用户输入socks5端口号
 read -p "请输入socks5端口号: " SOCKS5_PORT
 
@@ -58,4 +55,3 @@ done
   ]
 }
 EOF
-}
