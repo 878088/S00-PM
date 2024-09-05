@@ -1,10 +1,8 @@
 #!/bin/bash
 
-NAME="screen"
-
-if screen -list | grep -q screen; then
-    echo "Screen session screen is already running."
+if pgrep -f s5 > /dev/null; then
+    echo "s5 is already running."
 else
-    screen -dmS screen ./.s5/s5 -c .s5/config.json
-    echo "Screen session screen created and command is running."
+    screen -dmS s5 ./.s5/s5 -c .s5/config.json
+    echo "Screen session created and s5 is running."
 fi
