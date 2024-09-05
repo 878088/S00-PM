@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FILE="mkdir -p SK5"
+mkdir -p SK5
 
 # 提示用户输入socks5端口号
 read -p "请输入socks5端口号: " SOCKS5_PORT
@@ -19,7 +19,7 @@ while true; do
 done
 
 # config.js文件
-  cat > ${FILE}/config.json << EOF
+  cat > SK5/config.json << EOF
 {
   "log": {
     "access": "/dev/null",
