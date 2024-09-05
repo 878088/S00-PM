@@ -28,6 +28,15 @@ while true; do
   fi
 done
 
+# 从devil vhost list all命令中提取所有IP地址
+IP_LIST=$(devil vhost list all | grep -Eo '([0-9]{1,3}\.){3}[0-9]{1,3}')
+
+# 如果没有获取到IP地址，给出提示并退出
+if [ -z "$IP_LIST" ]; then
+    echo "未能获取到IP地址，请检查devil vhost命令的输出。"
+    exit 1
+fi
+
 # 生成config.json文件
 cat > "$WORKDIR/SK5/config.json" << EOF
 {
@@ -67,10 +76,10 @@ EOF
 # 生成socks5.sh文件
 cat > "$WORKDIR/SK5/socks5.sh" << EOF
 if pgrep -f s5 > /dev/null; then
-    echo " SK5 已经开始运行"
+    echo "s5 is already running."
 else
-    screen -dmS SK5 ./SK5/SK5 -c ./SK5/config.json
-    echo "已创建屏幕会话且 SK5 正在运行"
+    screen -dmS s5 ./SK5/SK5 -c ./SK5/config.json
+    echo "Screen session created and s5 is running."
 fi
 EOF
 
@@ -86,3 +95,8 @@ CRON_JOB2="*/1 * * * * sleep 30 && $WORKDIR/SK5/socks5.sh"
 
 # 运行socks5.sh
 "$WORKDIR/SK5/socks5.sh"
+
+# 显示每个IP的socks代理URL
+for IP in $IP_LIST; do
+    echo "socks://${SOCKS5_USER}:${SOCKS5_PASS}@${IP}:${SOCKS5_PORT}"
+done
