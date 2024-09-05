@@ -61,10 +61,10 @@ EOF
 
 cat > "$WORKDIR/SK5/socks5.sh" << EOF
 if pgrep -f SK5 > /dev/null; then
-    echo "SK5 is already running."
+    echo " SK5 已经开始运行"
 else
     screen -dmS SK5 ./SK5/SK5 -c SK5/config.json
-    echo "Screen session created and SK5 is running."
+    echo "已创建屏幕会话且 SK5 正在运行"
 fi
 EOF
 
