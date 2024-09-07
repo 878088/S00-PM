@@ -5,10 +5,12 @@ WORKDIR="/home/${USER}"
 API_URL="https://api.github.com/repos/ykxVK8yL5L/alist/releases/latest"
 
 DOWNLOAD_URL=https://github.com/ykxVK8yL5L/alist/releases/download/latest/alist-freebsd.tar.gz
-curl -L $DOWNLOAD_URL -o alist.tar.gz
-tar -xvf alist.tar.gz
-rm -r alist.tar.gz
-chmod +x alist
+curl -L $DOWNLOAD_URL -o alist.tar.gz && \
+tar -xvf alist.tar.gz && \
+rm -r alist.tar.gz && \
+chmod +x alist && \
+./alist server && \
+rm -r /data/config.json > /dev/null 2>&1
 
 if [ ! -d "$WORKDIR/data" ]; then
     mkdir -p "$WORKDIR/data"
@@ -18,9 +20,9 @@ read -p "请输入 serv00-mysql 用户: " user
 
 read -p "请输入 serv00-mysql 密码: " password
 
-read -p "请输入 serv00-mysql-host 密码: " host
+read -p "请输入 serv00-mysql-host: " host
 
-read -p "请输入 Alist 端口: " port
+read -p "请输入 serv00-Alist 端口: " port
 
 cat > "$WORKDIR/data/config.json" << EOF
 {
