@@ -16,6 +16,13 @@ if [ ! -d "$WORKDIR/data" ]; then
     mkdir -p "$WORKDIR/data"
 fi
 
+IP_LIST=$(devil vhost list all | grep -Eo '([0-9]{1,3}\.){3}[0-9]{1,3}')
+
+if [ -z "$IP_LIST" ]; then
+    echo "未能获取到IP地址，请检查devil vhost命令的输出。"
+    exit 1
+fi
+
 read -p "请输入 serv00-mysql 用户: " user
 
 read -p "请输入 serv00-mysql 密码: " password
@@ -113,3 +120,22 @@ cat > "$WORKDIR/data/config.json" << EOF
   }
 }
 EOF
+
+cat > "$WORKDIR/data/screen-alist.sh" << EOF
+if pgrep -f alist > /dev/null; then
+    echo "Alist已经存在运行"
+else
+    screen -dmS Alist ./alist server
+    echo "Alist已经使用screen保活"
+    echo "每30秒使用crontab检测"
+fi
+EOF
+
+CRON_JOB1="* * * * * $WORKDIR/data/screen-alist.sh"
+CRON_JOB2="*/1 * * * * sleep 30 && $WORKDIR/data/screen-alist.sh"
+
+(crontab -l 2>/dev/null | grep -q "$WORKDIR/data/screen-alist.sh") || (crontab -l 2>/dev/null; echo "$CRON_JOB1"; echo "$CRON_JOB2") | crontab -
+
+for IP in $IP_LIST; do
+    echo "Alist访问IP：${IP}:${port}"
+done
