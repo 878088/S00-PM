@@ -7,16 +7,18 @@ API_URL="https://api.github.com/repos/ykxVK8yL5L/alist/releases/latest"
 DOWNLOAD_URL=https://github.com/ykxVK8yL5L/alist/releases/download/latest/alist-freebsd.tar.gz
 curl -L $DOWNLOAD_URL -o alist.tar.gz
 tar -xvf alist.tar.gz
-
+rm -r alist.tar.gz
 chmod +x alist
 
 if [ ! -d "$WORKDIR/data" ]; then
     mkdir -p "$WORKDIR/data"
 fi
 
-read -p "请输入 Mysql 用户: " user
+read -p "请输入 serv00-mysql 用户: " user
 
-read -p "请输入 Mysql 密码: " password
+read -p "请输入 serv00-mysql 密码: " password
+
+read -p "请输入 serv00-mysql-host 密码: " host
 
 read -p "请输入 Alist 端口: " port
 
@@ -30,7 +32,7 @@ cat > "$WORKDIR/data/config.json" << EOF
   "token_expires_in": 48,
   "database": {
     "type": "mysql",
-    "host": "mysql1.serv00.com",
+    "host": "$host",
     "port": 3306,
     "user": "$user",
     "password": "$password.",
