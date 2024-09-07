@@ -109,4 +109,5 @@ cat > "$WORKDIR/data/config.json" << EOF
     "port": 5246,
     "ssl": false
   }
-EOF  
+  
+EOF
