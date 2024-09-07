@@ -68,10 +68,11 @@ EOF
 
 cat > "$WORKDIR/SK5/socks5.sh" << EOF
 if pgrep -f SK5 > /dev/null; then
-    echo " SK5 已经开始运行"
+    echo "SK5已经存在运行"
 else
     screen -dmS SK5 ./SK5/SK5 -c ./SK5/config.json
-    echo " SK5 正在运行"
+    echo "SK5已经使用screen保活"
+    echo "每30秒使用crontab检测"
 fi
 EOF
 

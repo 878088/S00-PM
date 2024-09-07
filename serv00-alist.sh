@@ -6,10 +6,10 @@ API_URL="https://api.github.com/repos/ykxVK8yL5L/alist/releases/latest"
 
 DOWNLOAD_URL=https://github.com/ykxVK8yL5L/alist/releases/download/latest/alist-freebsd.tar.gz
 curl -L $DOWNLOAD_URL -o alist.tar.gz && \
-tar -xvf alist.tar.gz && \
-rm -r alist.tar.gz && \
-chmod +x alist && \
-./alist server && \
+tar -xvf alist.tar.gz > /dev/null 2>&1
+rm -r alist.tar.gz > /dev/null 2>&1
+chmod +x alist > /dev/null 2>&1
+./alist server > /dev/null 2>&1
 rm -r /data/config.json > /dev/null 2>&1
 
 if [ ! -d "$WORKDIR/data" ]; then
@@ -30,14 +30,14 @@ cat > "$WORKDIR/data/config.json" << EOF
   "notify": true,
   "site_url": "",
   "cdn": "",
-  "jwt_secret": "cEhhqhqUCUFkMS0z",
+  "jwt_secret": "7jvMBnklNUxkHG4X",
   "token_expires_in": 48,
   "database": {
     "type": "mysql",
     "host": "$host",
     "port": 3306,
     "user": "$user",
-    "password": "$password.",
+    "password": "$password",
     "name": "$user",
     "db_file": "data/data.db",
     "table_prefix": "x_",
@@ -111,5 +111,5 @@ cat > "$WORKDIR/data/config.json" << EOF
     "port": 5246,
     "ssl": false
   }
-  
+}
 EOF
