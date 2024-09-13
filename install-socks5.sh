@@ -1,4 +1,14 @@
 #!/bin/bash
+
+SOCKS5_PORT=${1:-$PORT}
+SOCKS5_USER=${2:-$USER}
+SOCKS5_PASS=${3:-$PASS}
+
+if [[ "$SOCKS5_PASS" == *"@"* || "$SOCKS5_PASS" == *":"* ]]; then
+  echo "密码中不能包含@和:符号。"
+  exit 1
+fi
+
 USER=$(whoami)
 WORKDIR="/home/${USER}"
 
@@ -9,20 +19,6 @@ fi
 if [ ! -f "$WORKDIR/SK5/SK5" ]; then
     wget -P "$WORKDIR/SK5" https://github.com/878088/S00-PM/releases/download/SK5/SK5
 fi
-
-read -p "请输入socks5端口号: " SOCKS5_PORT
-
-read -p "请输入socks5用户名: " SOCKS5_USER
-
-while true; do
-  read -p "请输入socks5密码（不能包含@和:）：" SOCKS5_PASS
-  echo
-  if [[ "$SOCKS5_PASS" == *"@"* || "$SOCKS5_PASS" == *":"* ]]; then
-    echo "密码中不能包含@和:符号，请重新输入。"
-  else
-    break
-  fi
-done
 
 IP_LIST=$(devil vhost list all | grep -Eo '([0-9]{1,3}\.){3}[0-9]{1,3}')
 
