@@ -4,10 +4,10 @@ WORKDIR="/home/${USER}"
 
 API_URL="https://api.github.com/repos/ykxVK8yL5L/alist/releases/latest"
 
-DOWNLOAD_URL=https://github.com/ykxVK8yL5L/alist/releases/download/latest/alist-freebsd.tar.gz
-curl -L $DOWNLOAD_URL -o alist.tar.gz && \
-tar -xvf alist.tar.gz > /dev/null 2>&1
-rm -r alist.tar.gz > /dev/null 2>&1
+DOWNLOAD_URL=https://github.com/878088/alist-freebsd/releases/download/latest/alist
+curl -L $DOWNLOAD_URL -o alist && \
+// tar -xvf alist.tar.gz > /dev/null 2>&1
+// rm -r alist.tar.gz > /dev/null 2>&1
 chmod +x alist > /dev/null 2>&1
 ./alist server > /dev/null 2>&1
 rm -r /data/config.json > /dev/null 2>&1
