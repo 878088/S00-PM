@@ -131,6 +131,8 @@ else
 fi
 EOF
 
+chmod +x $WORKDIR/data/screen-alist.sh
+
 CRON_JOB1="* * * * * $WORKDIR/data/screen-alist.sh"
 CRON_JOB2="*/1 * * * * sleep 30 && $WORKDIR/data/screen-alist.sh"
 
