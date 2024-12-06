@@ -2,35 +2,40 @@
 USER=$(whoami)
 WORKDIR="/home/${USER}"
 
-API_URL="https://api.github.com/repos/ykxVK8yL5L/alist/releases/latest"
+# 获取最新版本的 alist 下载链接
+DOWNLOAD_URL=$(curl -s https://api.github.com/repos/878088/alist-freebsd/releases/latest | jq -r '.assets[] | select(.name=="alist") | .browser_download_url')
 
-DOWNLOAD_URL=https://github.com/878088/alist-freebsd/releases/download/v3.38.0/alist
-wget $DOWNLOAD_URL && \
-// tar -xvf alist.tar.gz > /dev/null 2>&1
-// rm -r alist.tar.gz > /dev/null 2>&1
+if [ -z "$DOWNLOAD_URL" ]; then
+    echo "无法获取最新版本的 alist 请检查网络"
+    exit 1
+fi
+
+# 下载最新版本的 alist
+wget -O alist "$DOWNLOAD_URL" && \
 chmod +x alist > /dev/null 2>&1
 ./alist server > /dev/null 2>&1
 rm -r /data/config.json > /dev/null 2>&1
 
+# 创建 data 目录
 if [ ! -d "$WORKDIR/data" ]; then
     mkdir -p "$WORKDIR/data"
 fi
 
+# 获取 IP 列表
 IP_LIST=$(devil vhost list all | grep -Eo '([0-9]{1,3}\.){3}[0-9]{1,3}')
 
 if [ -z "$IP_LIST" ]; then
-    echo "未能获取到IP地址，请检查devil vhost命令的输出。"
+    echo "未能获取到 IP 地址，请检查 devil vhost 命令的输出。"
     exit 1
 fi
 
+# 配置数据库和端口信息
 read -p "请输入 serv00-mysql 用户: " user
-
 read -p "请输入 serv00-mysql 密码: " password
-
 read -p "请输入 serv00-mysql-host: " host
-
 read -p "请输入 serv00-Alist 端口: " port
 
+# 写入配置文件
 cat > "$WORKDIR/data/config.json" << EOF
 {
   "force": false,
@@ -121,6 +126,7 @@ cat > "$WORKDIR/data/config.json" << EOF
 }
 EOF
 
+# 创建 screen 保活脚本
 cat > "$WORKDIR/data/screen-alist.sh" << EOF
 if pgrep -f alist > /dev/null; then
     echo "Alist已经存在运行"
@@ -133,11 +139,13 @@ EOF
 
 chmod +x $WORKDIR/data/screen-alist.sh
 
+# 添加定时任务
 CRON_JOB1="* * * * * $WORKDIR/data/screen-alist.sh"
 CRON_JOB2="*/1 * * * * sleep 30 && $WORKDIR/data/screen-alist.sh"
 
 (crontab -l 2>/dev/null | grep -q "$WORKDIR/data/screen-alist.sh") || (crontab -l 2>/dev/null; echo "$CRON_JOB1"; echo "$CRON_JOB2") | crontab -
 
+# 输出访问信息
 for IP in $IP_LIST; do
     echo "Alist访问IP：${IP}:${port}"
 done
